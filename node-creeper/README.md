@@ -2,8 +2,8 @@
 
 ### 说明 ###
 
-* 下载文件到本地，使用'npm install'安装依赖
-* 双击start.bat/执行'npm start' 运行
+* 下载文件到本地，使用`npm install`安装依赖
+* 双击start.bat/执行`npm start` 运行
 
 ### 注意 ###
 
