@@ -1,11 +1,10 @@
-var deepCopy = function () {
+//extend( [deep ], target, object1 [, objectN ] )
+var extend = function () {
     var length = arguments.length;
-    var target = arguments[0];
+    var target = arguments[0] || {};
     var deep = false;   // 是否深拷贝
     var srcIndex = 1;   // 扩展对象下标
-    var options,
-        src,
-        copy;
+    var options, src, copy, copyIsArray;
 
     if (typeof target === 'boolean') {
         deep = target;
@@ -13,14 +12,14 @@ var deepCopy = function () {
         srcIndex = 2;
     }
 
-    // 没有扩展对象返回target
-    if (length ==== srcIndex) {
-        return target;
-    }
-
     // 既不是对象也不是函数则置为空对象
     if (typeof target !== 'object' && typeof target !== 'function') {
         target = {};
+    }
+
+    // 没有扩展对象返回target
+    if (length === srcIndex) {
+        return target;
     }
 
     for (; srcIndex < length; srcIndex++) {
@@ -37,18 +36,19 @@ var deepCopy = function () {
                     continue;
                 }
 
-                if (deep && copy && typeof copy == 'object' && copy != null) {
-                    if (Array.isArray(copy)) {
-                        src = src && Array.isArray(src) ? src : [];
+                // 需要深拷贝且扩展对象值为对象或数组
+                if (deep && copy && (typeof copy == 'object' || (copyIsArray = Array.isArray(copy))) && copy != null) {
+                    if (copyIsArray) {
+                        copyIsArray = false;
+                        src = src && copyIsArray ? src : [];
                     } else {
                         src = (src && typeof src == 'object' && src != null) ? src : {};
                     }
+                    target[name] = extend(deep, src, copy);
+                } else if (copy !== undefined) {
+                    target[name] = copy;
                 }
-
-                target[name] = deepCopy(deep, src, copy);
             }
-        } else if (copy !== undefined) {
-            target[name] = copy;
         }
     }
 
